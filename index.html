@@ -15,7 +15,7 @@
     #confettiCanvas { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; }
     .card { width: min(720px, 92vw); padding: 26px 22px; background: var(--card); backdrop-filter: blur(10px); border-radius: 22px; text-align: center; box-shadow: 0 18px 60px rgba(0,0,0,.15); }
     .img-main { height: 160px; width: 160px; object-fit: cover; margin: 0 auto 1rem auto; border-radius: 1.5rem; border: 4px solid white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-    .button-zone { position: relative; width: 100%; height: 150px; margin: 0 auto; touch-action: none; }
+    .button-zone { position: relative; width: 100%; height: 150px; margin: 0 auto; touch-action: manipulation; }
     .run-btn { position: absolute; top: 50%; transform: translateY(-50%); padding: 12px 24px; font-size: 18px; font-weight: 800; border-radius: 999px; border: none; cursor: pointer; box-shadow: 0 10px 24px rgba(0,0,0,.14); transition: transform .12s ease; }
     #yesBtn { left: 15%; background: var(--yes); color: #fff; }
     #noBtn { left: 60%; background: #e5e7eb; color: #111827; }
@@ -97,20 +97,43 @@ Today isn’t just about flowers or gifts. It’s about us. And if I could give 
     function resizeCanvas() { confettiCanvas.width = window.innerWidth; confettiCanvas.height = window.innerHeight; }
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
-    function celebrate() { const end = Date.now() + 1000; (function frame() { confetti({ particleCount: 7, spread: 90, origin: { x: Math.random(), y: Math.random() * 0.3 } }); if (Date.now() < end) requestAnimationFrame(frame); }()); }
-    let yesScale = 1;
-    function growYes() { yesScale = Math.min(2.2, yesScale + 0.1); yesBtn.style.transform = `translateY(-50%) scale(${yesScale})`; }
-    zone.addEventListener("pointermove", e => {
-        const b = noBtn.getBoundingClientRect();
-        const d = Math.hypot((b.left + b.width/2) - e.clientX, (b.top + b.height/2) - e.clientY);
-        if (d < 100) {
-            const z = zone.getBoundingClientRect();
-            noBtn.style.left = Math.random() * (z.width - b.width) + "px";
-            noBtn.style.top = Math.random() * (z.height - b.height) + "px";
-            noBtn.style.transform = "none";
-            growYes();
-        }
+function celebrate() {
+    const isMobile = window.innerWidth < 768;
+
+    confetti({
+        particleCount: isMobile ? 80 : 200,
+        spread: 90,
+        origin: { y: 0.6 }
     });
+}    let yesScale = 1;
+    function growYes() { yesScale = Math.min(2.2, yesScale + 0.1); yesBtn.style.transform = `translateY(-50%) scale(${yesScale})`; }
+function handleMove(x, y) {
+    const b = noBtn.getBoundingClientRect();
+    const d = Math.hypot(
+        (b.left + b.width / 2) - x,
+        (b.top + b.height / 2) - y
+    );
+
+    if (d < 100) {
+        const z = zone.getBoundingClientRect();
+        const maxX = z.width - b.width;
+        const maxY = z.height - b.height;
+
+        noBtn.style.left = Math.max(0, Math.random() * maxX) + "px";
+        noBtn.style.top = Math.max(0, Math.random() * maxY) + "px";
+        noBtn.style.transform = "none";
+        growYes();
+    }
+}
+
+zone.addEventListener("mousemove", e => {
+    handleMove(e.clientX, e.clientY);
+});
+
+zone.addEventListener("touchmove", e => {
+    const t = e.touches[0];
+    handleMove(t.clientX, t.clientY);
+}, { passive: true });
     yesBtn.addEventListener("click", () => { celebrate(); nextPage(2); });
     function winGift() { confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } }); setTimeout(() => { nextPage(5); }, 500); }
   </script>
