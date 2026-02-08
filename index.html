@@ -92,6 +92,7 @@ Today isn’t just about flowers or gifts. It’s about us. And if I could give 
     const zone = document.getElementById("zone");
     const yesBtn = document.getElementById("yesBtn");
     const noBtn = document.getElementById("noBtn");
+    const isMobile = window.matchMedia("(pointer: coarse)").matches;
     function nextPage(num) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); setTimeout(() => { document.getElementById('page' + num).classList.add('active'); }, 50); }
     const confettiCanvas = document.getElementById("confettiCanvas");
     function resizeCanvas() { confettiCanvas.width = window.innerWidth; confettiCanvas.height = window.innerHeight; }
@@ -135,6 +136,40 @@ zone.addEventListener("touchmove", e => {
     handleMove(t.clientX, t.clientY);
 }, { passive: true });
     yesBtn.addEventListener("click", () => { celebrate(); nextPage(2); });
+    if (isMobile) {
+  const SAFE_DISTANCE = 90; // distance in pixels
+
+  function moveNoButtonMobile() {
+    const zoneRect = zone.getBoundingClientRect();
+    const btnRect = noBtn.getBoundingClientRect();
+
+    const maxX = zoneRect.width - btnRect.width;
+    const maxY = zoneRect.height - btnRect.height;
+
+    noBtn.style.left = Math.max(0, Math.random() * maxX) + "px";
+    noBtn.style.top  = Math.max(0, Math.random() * maxY) + "px";
+    noBtn.style.transform = "none";
+  }
+
+  function detectFingerApproach(x, y) {
+    const btn = noBtn.getBoundingClientRect();
+
+    const centerX = btn.left + btn.width / 2;
+    const centerY = btn.top  + btn.height / 2;
+
+    const distance = Math.hypot(centerX - x, centerY - y);
+
+    if (distance < SAFE_DISTANCE) {
+      moveNoButtonMobile();
+      growYes(); // keeps your Yes button growth
+    }
+  }
+
+  zone.addEventListener("touchmove", (e) => {
+    const touch = e.touches[0];
+    detectFingerApproach(touch.clientX, touch.clientY);
+  }, { passive: true });
+}
     function winGift() { confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } }); setTimeout(() => { nextPage(5); }, 500); }
   </script>
 </body>
