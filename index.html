@@ -8,6 +8,20 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
   <style>
+    @keyframes reveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.85) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-reveal {
+  animation: reveal 0.6s ease-out forwards;
+}
     :root { --bg1: #ffd6e7; --bg2: #ffeef6; --card: #ffffffcc; --yes: #ff3b7a; --yesHover: #ff1f68; }
     body { margin: 0; min-height: 100svh; display: grid; place-items: center; background: radial-gradient(circle at top, var(--bg2), var(--bg1)); font-family: 'Quicksand', sans-serif; overflow-x: hidden; padding: 16px; }
     .page { display: none; transform: scale(0.9); opacity: 0; transition: all 0.4s ease-in-out; }
@@ -80,11 +94,8 @@ Today isn’t just about flowers or gifts. It’s about us. And if I could give 
     <div id="page5" class="page">
         <h2 class="text-2xl font-bold text-[#ff4d6d] mb-2">You Won! 🏆</h2>
         <p class="text-gray-600 text-sm mb-6">A gift for someone whom I Love.</p>
-        <div class="bg-white rounded-2xl p-4 shadow-inner text-center space-y-4 relative overflow-hidden">
-        <div class="absolute -top-2 -right-8 rotate-45 bg-[#ff4d6d] text-white text-[10px] font-bold px-10 py-1 shadow-md">
-          🎀
-</div>
- <div class="bg-[#ff4d6d] text-white text-sm font-bold py-2 px-4 rounded-xl shadow-md inline-block">
+        <div class="bg-white rounded-2xl p-4 shadow-inner text-center space-y-4">
+<div class="bg-[#ff4d6d] text-white text-sm font-bold py-2 px-4 rounded-2xl shadow-md inline-block animate-reveal">
   🎁 Myntra Gift Card
 </div>
 
