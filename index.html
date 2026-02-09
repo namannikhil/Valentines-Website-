@@ -80,9 +80,24 @@ Today isn’t just about flowers or gifts. It’s about us. And if I could give 
     <div id="page5" class="page">
         <h2 class="text-2xl font-bold text-[#ff4d6d] mb-2">You Won! 🏆</h2>
         <p class="text-gray-600 text-sm mb-6">A gift for someone whom I Love.</p>
-        <a href="https://www.myntra.com/watches/michael+kors/michael-kors-pyper-women-white-analogue-watch-mk2741/7371099/buy" target="_blank" class="inline-block bg-[#ff4d6d] text-white px-8 py-4 rounded-3xl font-bold shadow-lg hover:bg-[#ff758c] transition-all transform hover:scale-105">
-            VIEW MY GIFT ⌚
-        </a>
+        <div class="bg-white rounded-2xl p-4 shadow-inner text-center space-y-3">
+  <p class="text-sm font-bold text-gray-700">🎟️ Myntra Voucher Code</p>
+
+  <div class="flex items-center justify-between bg-gray-100 rounded-xl px-4 py-3">
+    <span id="couponCode" class="font-mono text-sm font-bold text-[#ff4d6d]">
+      LOVE-ANANYA
+    </span>
+    <button onclick="copyCoupon()"
+      class="text-xs bg-[#ff4d6d] text-white px-4 py-2 rounded-full font-bold">
+      COPY
+    </button>
+  </div>
+
+  <button onclick="openMyntraVoucher()"
+    class="w-full bg-[#ff4d6d] text-white py-3 rounded-2xl font-bold shadow-lg hover:bg-[#ff758c] transition-all">
+    OPEN MYNTRA & USE CODE 🛍️
+  </button>
+</div>
         <br>
         <button onclick="nextPage(2)" class="mt-8 bg-[#fa8298] text-black px-6 py-2 rounded-full text-xs font-bold uppercase">Back</button>
     </div>
@@ -171,6 +186,17 @@ zone.addEventListener("touchmove", e => {
   }, { passive: true });
 }
     function winGift() { confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } }); setTimeout(() => { nextPage(5); }, 500); }
+    function copyCoupon() {
+  const code = document.getElementById("couponCode").innerText;
+
+  navigator.clipboard.writeText(code).then(() => {
+    alert("Coupon code copied ❤️\nPaste it on Myntra checkout!");
+  });
+}
+
+function openMyntraVoucher() {
+  window.open("https://www.myntra.com/giftcard", "_blank");
+}
   </script>
 </body>
 </html>
